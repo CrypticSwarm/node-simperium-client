@@ -1,4 +1,4 @@
-{ "name": "simperium-api"
+{ "name": "simperium-client"
 , "description": "Allows the use of simperium API from within node.js"
 , "version": "0.0.1"
 , "authors": [ "Perrin Westrich <crypticswarm@gmail.com>" ]
