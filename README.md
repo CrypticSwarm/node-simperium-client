@@ -27,6 +27,8 @@ bucket.list(cb)
   1. `host` (*string*) - The host for the simperium server defaults to `auth.simperium.com`
   1. `version` (*string*) - The api version, defaults to `1`
 
+Returns an Auth Object. The Auth object is your gate way into the user management features of simperium.
+
 
 ### `Auth#create(info, cb)`
 
@@ -38,10 +40,39 @@ bucket.list(cb)
   1. userid (*string*) — A unique id that won't change if user changes their username
 
 
-### `Auth#authorize`
-### `Auth#update`
-### `Auth#reset\_password`
-### `Auth#delete`
+### `Auth#authorize(info, cb)`
+
+* `info` (*object*) - The info needs the following values:
+  1. username — Usernames currently must be a valid email address
+  1. password — Password for the user
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. access_token — Use token to access data for this user
+  1. userid — A unique id that won't change if user changes their username
+
+### `Auth#update(info, cb)`
+
+* `info` (*object*) - The info needs the following values:
+  1. username (*string*) — Usernames currently must be a valid email address
+  1. password (*string*) — Password for the user
+  1. new_username (*string, option*) — New username
+  1. new_password (*string, option*) — New password
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. status (*string*) The status
+
+### `Auth#reset\_password(info, cb)`
+
+* `info` (*object*) - The info needs the following values:
+  1. username — Usernames currently must be a valid email address
+  1. new_password — New password (optional)
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. status (*string*) The status
+
+### `Auth#delete(info, cb)`
+
+* `info` (*object*) - The info needs the following values:
+  1. username — Usernames currently must be a valid email address
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. status (*string*) The status
 
 ### `Api#bucket(name)`
 
@@ -77,6 +108,32 @@ Returns a `Bucket` object.
 
 Returns an `Entity` object.
 
-### `Entry#get`
-### `Entry#put`
-### `Entry#delete`
+### `Entry#get(cb)`
+
+
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. Res.header(X-Simperium-Version) — An HTTP response header indicating the object version retrieved
+  1. { data }
+
+### `Entry#put(opts, cb)`
+
+* `opts` (*object, optional*) - An options object with the following are valid key/values:
+  1. clientid — A unique string identifying your client (useful for debugging and tracking changes)
+  1. ccid — A unique id for this change. If you need to resubmit this operation, you should send the same ccid to prevent duplicate operations.
+  1. response — Set this parameter to 1 to return resulting data
+  1. replace — By default, this endpoint will update the object with the data you submit. If you omit fields, then they won't be changed. If you need to remove fields, set replace to 1 to completely replace the object data with what you submit.
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. X-Simperium-Version — An HTTP response header indicating the current object version after the modify 
+  1. { data } — If response was set to 1 in query parameter
+
+
+
+### `Entry#delete(opts, cb)`
+
+/v/{version number} — A specific object version to delete, if you suppply this, delete will only succeed if the current object version matches this parameter
+
+* `opts` (*object, optional*) - An options object with the following are valid key/values:
+  1. clientid (*string*)— A unique string identifying your client (useful for debugging and tracking changes)
+  1. ccid (*string*) — A unique id for this change. If you need to resubmit this operation, you should send the same ccid to prevent duplicate operations.
+* `cb`  (*function(err, res, data)*) data passed to callback contains:
+  1. X-Simperium-Version (*string*) — An HTTP response header indicating the current object version after the modify
