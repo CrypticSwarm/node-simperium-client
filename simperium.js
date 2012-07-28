@@ -7,26 +7,52 @@ module.exports = {
 
 function post(endPoint) {
   return function apiPost(data, cb) {
-    var url = this.baseUrl + '/' + endPoint
-    request({ url: url, json: data, headers: this.headers, method: 'POST' }, cb)
+    var url = this.baseUrl
+    var reqOpts = { url: url, json: data, headers: this.headers, method: 'POST' }
+    if (endPoint) url += '/' + endPoint
+    if (data.qs != null) {
+      reqOpts.url += data.urlParam
+      delete data.urlParam
+    }
+    if (data.qs != null) {
+      reqOpts.qs += data.qs
+      delete data.qs
+    }
+    request(, cb)
   }
 }
 
 function get(endPoint) {
   return function apiGet(data, cb) {
-    var url = this.baseUrl + '/' + endPoint
+    var url = this.baseUrl
+    if (endPoint) url += '/' + endPoint
     var reqOpts = { url: url, headers: this.headers, method: 'GET' }
     if (cb == null) cb = data
-    else reqOpts.qs = data
-    console.log(reqOpts)
+    else { 
+      if (data.urlParam != null) {
+        reqOpts.url += data.urlParam
+        delete data.urlParam
+      }
+      reqOpts.qs = data
+    }
     request(reqOpts, cb)
   }
 }
 
 function del(endpoint) {
-  return function apiDelete(cb) {
-    var url = this.baseUrl + '/' + endPoint
-    request({ url: url, headers: this.headers, method: 'DELETE' })
+  return function apiDelete(data, cb) {
+    var url = this.baseUrl
+    var reqOpts = { url: url, headers: this.headers, method: 'DELETE' }
+    if (endPoint) url += '/' + endPoint
+    if (cb == null) cb = data
+    else {
+      if (data.urlParam != null) {
+        reqOpts.url += data.urlParam
+        delete data.urlParam
+      }
+      reqOpts.qs = data
+    }
+    request(reqOpts, cb)
   }
 }
 
@@ -86,7 +112,7 @@ function Entry(name, bucket) {
 }
 
 Entry.prototype = {
-  get: get(''),
-  put: post(''),
-  delete: del('')
+  get: get(),
+  put: post(),
+  delete: del()
 }
