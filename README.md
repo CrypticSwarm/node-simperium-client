@@ -29,7 +29,6 @@ bucket.list(cb)
 
 Returns an Auth Object. The Auth object is your gate way into the user management features of simperium.
 
-
 ### `Auth#create(info, cb)`
 
 * `info` (*object*) - The info needs the following values:
@@ -59,7 +58,7 @@ Returns an Auth Object. The Auth object is your gate way into the user managemen
 * `cb`  (*function(err, res, data)*) data passed to callback contains:
   1. status (*string*) The status
 
-### `Auth#reset\_password(info, cb)`
+### `Auth#reset_password(info, cb)`
 
 * `info` (*object*) - The info needs the following values:
   1. username — Usernames currently must be a valid email address
@@ -111,6 +110,8 @@ Returns an `Entity` object.
 ### `Entry#get(cb)`
 
 
+* `opts` (*object, optional*) - An options object with the following are valid key/values:
+  1. urlParam (*string*) - `/v/{version number}` — A specific object version to retrieve
 * `cb`  (*function(err, res, data)*) data passed to callback contains:
   1. Res.header(X-Simperium-Version) — An HTTP response header indicating the object version retrieved
   1. { data }
@@ -118,22 +119,23 @@ Returns an `Entity` object.
 ### `Entry#put(opts, cb)`
 
 * `opts` (*object, optional*) - An options object with the following are valid key/values:
-  1. clientid — A unique string identifying your client (useful for debugging and tracking changes)
-  1. ccid — A unique id for this change. If you need to resubmit this operation, you should send the same ccid to prevent duplicate operations.
-  1. response — Set this parameter to 1 to return resulting data
-  1. replace — By default, this endpoint will update the object with the data you submit. If you omit fields, then they won't be changed. If you need to remove fields, set replace to 1 to completely replace the object data with what you submit.
+  1. urlParam (*string*) - `/v/{version number}` — A specific object version to modify
+  1. qs (*object*) - a query sting object with the following valid values:
+      * clientid — A unique string identifying your client (useful for debugging and tracking changes)
+      * ccid — A unique id for this change. If you need to resubmit this operation, you should send the same ccid to prevent duplicate operations.
+      * response — Set this parameter to 1 to return resulting data
+      * replace — By default, this endpoint will update the object with the data you submit. If you omit fields, then they won't be changed. If you need to remove fields, set replace to 1 to completely replace the object data with what you submit.
 * `cb`  (*function(err, res, data)*) data passed to callback contains:
   1. X-Simperium-Version — An HTTP response header indicating the current object version after the modify 
   1. { data } — If response was set to 1 in query parameter
 
-
-
 ### `Entry#delete(opts, cb)`
 
-/v/{version number} — A specific object version to delete, if you suppply this, delete will only succeed if the current object version matches this parameter
 
 * `opts` (*object, optional*) - An options object with the following are valid key/values:
-  1. clientid (*string*)— A unique string identifying your client (useful for debugging and tracking changes)
-  1. ccid (*string*) — A unique id for this change. If you need to resubmit this operation, you should send the same ccid to prevent duplicate operations.
+  1. urlParam (*string*) - `/v/{version number}` — A specific object version to delete, if you suppply this, delete will only succeed if the current object version matches this parameter
+  1. qs (*object*) - a query sting object with the following valid values:
+      * clientid (*string*)— A unique string identifying your client (useful for debugging and tracking changes)
+      * ccid (*string*) — A unique id for this change. If you need to resubmit this operation, you should send the same ccid to prevent duplicate operations.
 * `cb`  (*function(err, res, data)*) data passed to callback contains:
-  1. X-Simperium-Version (*string*) — An HTTP response header indicating the current object version after the modify
+  1. X-Simperium-Version (*string*) — An HTTP (see res object second param to cb) response header indicating the current object version after the modify
