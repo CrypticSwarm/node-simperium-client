@@ -7,6 +7,6 @@
   }
 , "main": "./simperium.js"
 , "dependencies":
-  { "request": "~2.9.203"
+  { "request": "~2.88.0"
   }
 }
